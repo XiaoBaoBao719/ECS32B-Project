@@ -14,7 +14,7 @@ class Truck:
         self.id = id
         self.size = n
         self.location = loc
-        self.packages = []
+        self.packages = dict[]
 
 
     def collectPackage(self, pk):
