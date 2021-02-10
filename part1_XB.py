@@ -18,6 +18,9 @@ class Truck:
 
 
     def collectPackage(self, pk):
+        #Push into some data structure, taking out of postal service
+        if self.location == pk.location:
+            self.insert(pk)
 
 
     def deliverOnePackage(self, pk):
