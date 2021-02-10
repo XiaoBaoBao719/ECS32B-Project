@@ -14,4 +14,7 @@ def hash(id, tableSize):
 size = 10
 id = 44
 
+for i in range (10):
+	print("testing github")
+
 print(hash(id, size))
