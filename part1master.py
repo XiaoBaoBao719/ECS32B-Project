@@ -48,35 +48,35 @@ class Truck:
         self.location = loc
         self.packages = []
 
-    def collectPackage(self, pk):
+     def collectPackage(self, pk):
         # Push into some data structure, taking out of postal service
         if self.location == pk.address:
-            self.append(pk.id)
+            self.append(pk)
+            pk.collected = True
         else:
             print("Truck is not at postal office!")
 
-    def deliverOnePackage(self, pk):
+     def deliverOnePackage(self, pk):
         # Remove a singular package out of truck into delivery address
         if self.location == pk.address:
-            self.pop(pk.id)
+            self.remove(pk)
+            pk.delivered = True
         else:
             print("Truck is not at the correct delivery address!")
-
-    def deliverPackages(self):
-
-        ##   Will remove multiple packages to a singluar address
+            
+     def deliverPackages(self):
+        ##   Will remove multiple packages to a singular address
         # Chained packages, so multiple packages
         # if self.location == pk.location:
         #     while
-        if self.location == pk.address:
-            while self.packages:
-                self.packages.pop()
+        while self.packages:
+            self.packages.pop()
         else:
             print("Can not deliver packages")
 
-    def removePackage(self, id, pk):
-        if self.location == pk.location:
-            self.pop(id, pk)
+     def removePackage(self, pk):
+        if self.location == pk.address:
+            self.packages.pop(pk)
         else:
             print("Package has not returned to post office.")
 
