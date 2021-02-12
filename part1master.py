@@ -117,3 +117,5 @@ class Truck:
         for i in self.packages:
             idList[i] = self.packages.id
         return idList
+
+        hello = "wow"
