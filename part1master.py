@@ -15,8 +15,17 @@ class Package:
 @precondition: both id and tableSize must be integer values
 @return: method returns an integer value i such that 0 <= i <= tableSize
 """
-def hash(id, tableSize):
-    #squares the id
+def hashMe(id, tableSize):
+    
+    nums2 = 0
+    if isinstance(id, str):
+        for i in id:
+          nums2 += ord(i)
+    else:
+        nums2 = id
+
+    square = pow(nums2, 2)
+
     square = pow(id, 2)
     counter = 0
     middle = ''
@@ -42,19 +51,22 @@ def hash(id, tableSize):
     return int(middleNums) % tableSize
 
 class Truck:
+
+    tableSize = 1000
+
     def __init__(self, id, n, loc):
         self.id = id
         self.size = n
         self.location = loc
-        self.packages = {}
+        self.packages = [None] * tableSize
 
      def collectPackage(self, pk):
         # Push into some data structure, taking out of postal service
-        index = hash(pk.id, self.packages.size)
+        index = hashMe(pk.id, len(self.packages))
 
         if self.location == pk.address:
-            self.append(pk)
             pk.collected = True
+            self.packages[index] = pk
         else:
             print("Truck is not at postal office!")
 
@@ -89,4 +101,8 @@ class Truck:
             print("Truck is already at destination")
 
     def getPackagesIds(self):
-        self.packages.id()
+        #self.packages.id()
+        idList = []
+        for i in self.packages:
+            idList[i] = self.packages.id
+        return idList

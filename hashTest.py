@@ -1,7 +1,16 @@
 import math
 
 def hash(id, tableSize):
-    square = pow(id, 2)
+
+    nums2 = 0
+
+    if isinstance(id, str):
+        for i in id:
+          nums2 += ord(i)
+    else:
+        nums2 = id
+
+    square = pow(nums2, 2)
     counter = 0
     middle = ''
     squared = str(square)
@@ -24,12 +33,13 @@ def hash(id, tableSize):
 
     return int(middleNums) % tableSize
 
-
 """THIS IS A TEST AREA """
 
-size = 100
-id = 144
+size = 1000
+id = "pk1"
 
 print(hash(id, size))
+
+
 
 #print(math.log(100, 10))
