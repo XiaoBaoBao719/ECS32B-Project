@@ -1,3 +1,5 @@
+import math
+
 class Package:
     def __init__(self, id):
         self.id = id
@@ -7,17 +9,37 @@ class Package:
         self.collected = False
         self.delivered = False
 
-import math
-
+"""
+@parameter id - integer value number that represents the package tracking number
+           tableSize - the size of the hash table 
+@precondition: both id and tableSize must be integer values
+@return: method returns an integer value i such that 0 <= i <= tableSize
+"""
 def hash(id, tableSize):
-        square = pow(id, 2)
-        counter = 0
-        middle = ""
-        for i in str(square):
-            if(counter == str(square) / 2):
-                middle += i
-            counter += 1
-        return float(middle) % tableSize
+    #squares the id
+    square = pow(id, 2)
+    counter = 0
+    middle = ''
+    
+    #converts id into a string
+    squared = str(square)
+
+    #calculates the number of place digits to pick relative to the middle digit
+    distFromMiddle = int(math.log(tableSize, 10))
+
+    #gets the middle digit index
+    middleIndex = int((len(squared) / 2))
+
+    #gets the beginning the middle digits
+    fwd = middleIndex - distFromMiddle + 1
+
+    #gets the end of the middle digits
+    bwd = middleIndex + distFromMiddle
+
+    #gets the middle digits
+    middleNums = str(int(squared[fwd:bwd]))
+
+    return int(middleNums) % tableSize
 
 class Truck:
     def __init__(self, id, n, loc):
