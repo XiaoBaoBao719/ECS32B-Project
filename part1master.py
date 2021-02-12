@@ -46,10 +46,12 @@ class Truck:
         self.id = id
         self.size = n
         self.location = loc
-        self.packages = []
+        self.packages = {}
 
      def collectPackage(self, pk):
         # Push into some data structure, taking out of postal service
+        index = hash(pk.id, self.packages.size)
+
         if self.location == pk.address:
             self.append(pk)
             pk.collected = True
