@@ -69,26 +69,26 @@ class Truck:
 
     def collectPackage(self, pk):
         #print(pk.id)
-        print("CHECKING")
-        print(pk.getId())
+        print("COLLECTING")
         print(pk.getId())
 
         # Push into some data structure, taking out of postal service
-        index = hashMe(pk.getId(), len(self.packages))
+        index = hashMe(pk.getId(), tableDim)
         if self.location == pk.office:
             pk.collected = True
             self.packages[index] = pk
-
-            print(self.packages)
         else:
             print("Truck is not at postal office!")
 
+        print("Package List:", self.packages)
+
     def deliverOnePackage(self, pk):
         # Remove a singular package out of truck into delivery address
+        print("DELIVERING ONE PKG")
         index = hashMe(pk.getId(), tableDim)
-        if self.location == pk.address:
+        if self.location == pk.address and self.packages[index] != None:
             #self.packages[index] = None
-            pk.delivered = True
+            self.packages[index].delivered = True
         else:
             print("Truck is not at the correct delivery address!")
 
@@ -96,6 +96,7 @@ class Truck:
         ##   Will remove multiple packages to a singular address
         # Chained packages, so multiple packages
         # if self.location == pk.location:
+        print("DELIVERING ALL PACKAGES")
         for i in self.packages:
             if(self.location == self.packages[i].address):
                 self.packages[i].delivered = True
@@ -104,6 +105,7 @@ class Truck:
             print("Can not deliver packages")
 
     def removePackage(self, pk):
+        print("REMOVING ALL PACKAGES")
         if self.location == pk.address:
             index = hashMe(pk.getId(), tableDim)
             self.packages[index] = False
@@ -112,18 +114,18 @@ class Truck:
             print("Package has not returned to post office.")
 
     def driveTo(self, loc):
+        print("DRIVING")
         if self.location != loc:
             self.location = loc
         else:
             print("Truck is already at destination")
 
     def getPackagesIds(self):
-    
+        print("GETTING ALL PACKAGE IDS")
         idList = []
-        i = 0
-        while i < 20:
+        for i in range(len(self.packages)):
             if self.packages[i] != None:
-                idList[i] = self.packages[i].id
-            i += 1
+                idList.append(self.packages[i].id)
+            
         return idList
 
