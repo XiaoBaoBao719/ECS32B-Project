@@ -67,14 +67,38 @@ class Truck:
         self.packages = [None] * 20
 
     def collectPackage(self, pk):
+        print("COLLECTING")
         print(pk.id)
+        print(pk.office)
+        print(pk.collected)
+        print(pk.delivered)
+        print(self.location)
+
         if pk == None:
             print("No package to pick up!")
+            return
         # Push into some data structure, taking out of postal service
+
+        #curNumPkgs = len(getPackagesIds())
+        #print(len(getPackagesIds()))
+
+        curNumPkgs = 0
+
+        for i in range(len(self.packages)):
+            if self.packages[i] is not None:
+                curNumPkgs += 1
+
+        print("Curent num pkgs", curNumPkgs)
+
         index = hashMe(pk.id, len(self.packages))
+
         if self.location == pk.office:
-            pk.collected = True
-            self.packages[index] = pk
+            if(curNumPkgs < self.size):
+                pk.collected = True
+                self.packages[index] = pk
+            else:
+                print("Can't fit anymore packages")
+            #self.packages[index].collected = True
         else:
             print("Truck is not at postal office!")
 
@@ -122,13 +146,7 @@ class Truck:
 
         idList = []
         for i in range(len(self.packages)):
-            #     for j in range(len(idList)):
-            #         while self.packages[i] is not None:
-            #             idList[j] = self.packages[i].id
-            #             i += 1
-            #         j += 1
             if self.packages[i] is not None:
                 idList.append(self.packages[i].id)
 
-        # idList = [self.packages[i].id for i in range(len(self.packages))]
         return idList
