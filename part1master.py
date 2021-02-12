@@ -16,7 +16,7 @@ class Package:
 @return: method returns an integer value i such that 0 <= i <= tableSize
 """
 def hashMe(id, tableSize):
-    
+
     nums2 = 0
     if isinstance(id, str):
         for i in id:
@@ -62,6 +62,8 @@ class Truck:
 
      def collectPackage(self, pk):
         # Push into some data structure, taking out of postal service
+        print(pk.id)
+
         index = hashMe(pk.id, len(self.packages))
 
         if self.location == pk.address:
@@ -90,7 +92,16 @@ class Truck:
 
      def removePackage(self, pk):
         if self.location == pk.address:
-            self.packages.pop(pk)
+            #self.packages.pop(pk)
+            index = hashMe(pk.id, tableSize)
+            returnPackage = self.packages[index]
+        #self.packages.id()
+        idList = []
+        for i in self.packages:
+            idList[i] = self.packages.id
+        return idList
+            self.packages[index] = None
+
         else:
             print("Package has not returned to post office.")
 
