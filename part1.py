@@ -1,16 +1,15 @@
 import math
 
+
 class Package:
     def __init__(self, id):
         self.id = id
-        self.address = ""
-        self.office = ""
+        self.address = ""  # Delivery address
+        self.office = ""  # Post office address
         self.ownerName = ""
         self.collected = False
         self.delivered = False
 
-    def getId(self):
-        return self.id
 
 """
 @parameter id - integer value number that represents the package tracking number
@@ -68,27 +67,24 @@ class Truck:
         self.packages = [None] * 20
 
     def collectPackage(self, pk):
-        #print(pk.id)
-        print("COLLECTING")
-        print(pk.getId())
-
+        print(pk.id)
+        if pk == None:
+            print("No package to pick up!")
         # Push into some data structure, taking out of postal service
-        index = hashMe(pk.getId(), tableDim)
+        index = hashMe(pk.id, len(self.packages))
         if self.location == pk.office:
             pk.collected = True
             self.packages[index] = pk
         else:
             print("Truck is not at postal office!")
 
-        print("Package List:", self.packages)
-
     def deliverOnePackage(self, pk):
         # Remove a singular package out of truck into delivery address
-        print("DELIVERING ONE PKG")
-        index = hashMe(pk.getId(), tableDim)
-        if self.location == pk.address and self.packages[index] != None:
-            #self.packages[index] = None
+        print('DELIVERING ONE PACKAGES')
+        index = hashMe(pk.id, tableDim)
+        if self.location == pk.address and self.packages[index] is not None:
             self.packages[index].delivered = True
+            self.packages[index] = None
         else:
             print("Truck is not at the correct delivery address!")
 
@@ -96,36 +92,43 @@ class Truck:
         ##   Will remove multiple packages to a singular address
         # Chained packages, so multiple packages
         # if self.location == pk.location:
-        print("DELIVERING ALL PACKAGES")
-        for i in self.packages:
-            if(self.location == self.packages[i].address):
+        print("Delivering LOTS OF PACKAGES")
+        for i in range(len(self.packages)):
+            if (self.packages[i] != None) and (self.location == self.packages[i].address):
                 self.packages[i].delivered = True
-                #self.packages[i] = None
+                self.packages[i] = None
         else:
             print("Can not deliver packages")
 
     def removePackage(self, pk):
-        print("REMOVING ALL PACKAGES")
-        if self.location == pk.address:
-            index = hashMe(pk.getId(), tableDim)
-            self.packages[index] = False
-            #self.packages[index] = None
+        print("REMOVING A PACKAGE")
+        print(pk.office)
+        index = hashMe(pk.id, tableDim)
+        if self.packages[index] is not None:
+            self.packages[index].office = self.location
+            pk.delivered = False
+            pk.collected = False
+            self.packages[index] = None
         else:
             print("Package has not returned to post office.")
 
     def driveTo(self, loc):
-        print("DRIVING")
         if self.location != loc:
             self.location = loc
         else:
             print("Truck is already at destination")
 
     def getPackagesIds(self):
-        print("GETTING ALL PACKAGE IDS")
+
         idList = []
         for i in range(len(self.packages)):
-            if self.packages[i] != None:
+            #     for j in range(len(idList)):
+            #         while self.packages[i] is not None:
+            #             idList[j] = self.packages[i].id
+            #             i += 1
+            #         j += 1
+            if self.packages[i] is not None:
                 idList.append(self.packages[i].id)
-            
-        return idList
 
+        # idList = [self.packages[i].id for i in range(len(self.packages))]
+        return idList
