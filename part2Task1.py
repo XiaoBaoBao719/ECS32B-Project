@@ -21,13 +21,19 @@ def bfs(map, office):
 			adjacencyList.append({nodeU : nodeV})
 			print("updated adjacencyList")
 
-	visitstatus = [False] * (max(map) + 1)
+	visitstatus = {}
 	mypaths = []
 	myqueue = []
 	myqueue.append(office)
 
 	visitstatus[office] = True
-
+	
+	for i in adjacencyList:
+		key = i[0]
+		visitstatus.append({key : False})
+	
+	print(visitstatus)
+	
 	while myqueue:
 		office = myqueue.pop(0)
 
