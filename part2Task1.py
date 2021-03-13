@@ -3,23 +3,40 @@ BFS
 """
 
 
-def bfs(map, office): #map is the graph,
-    visitstatus = [False] * (max(map) + 1)
-    mypaths = []
-    myqueue = []
-    myqueue.append(office)
+def bfs(map, office):
 
-    visitstatus[office] = True
+	adjacencyList = defaultdict(list)
+	#build an adjacency dictionary 
+	for i in map:
 
-    while myqueue:
-        office = myqueue.pop(0)
+		nodeU = i[0]
+		nodeV = i[1]
+		weight = i[2]
 
-        for nextnode in map[office]:
-            if visitstatus[nextnode] == False:
-                myqueue.append(nextnode)
-                visitstatus[nextnode] = True
-        return mypaths
+		try:
+			adjacencyList[nodeU].append(nodeV)
 
+		except KeyError:
+			print("adding new location to Adjacency List")
+			adjacencyList.append({nodeU : nodeV})
+			print("updated adjacencyList")
+
+	visitstatus = [False] * (max(map) + 1)
+	mypaths = []
+	myqueue = []
+	myqueue.append(office)
+
+	visitstatus[office] = True
+
+	while myqueue:
+		office = myqueue.pop(0)
+
+		for nextnode in map[office]:
+			if visitstatus[nextnode] == False:
+				myqueue.append(nextnode)
+				visitstatus[nextnode] = True
+
+	return mypaths
 
 
 """
