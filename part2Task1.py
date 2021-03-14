@@ -36,11 +36,13 @@ DFS
 
 
 def dfs(map, office):
-    visitstatus = [False] * (max(map) + 1)
+    adjacencyList = helpAdjList(map)
 
-    if visitstatus == False:
-        visitstatus.add(office)
-        for nextnode in map[office]:
+    visitstatus = {}
+
+    for nextnode in map[office]:
+        if visitstatus == False:
+            visitstatus.add(office)
             return dfs(map, nextnode)
 
 
@@ -50,6 +52,7 @@ Dijkstra's
 
 
 def dijkstra(map, office):
+	
     return
 
 
