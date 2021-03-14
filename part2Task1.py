@@ -4,45 +4,30 @@ BFS
 
 
 def bfs(map, office):
+    adjacencyList = helpAdjList(map)
 
-	adjacencyList = defaultdict(list)
-	#build an adjacency dictionary 
-	for i in map:
+    visitstatus = {}
+    mypaths = []
+    myqueue = []
+    myqueue.append(office)
 
-		nodeU = i[0]
-		nodeV = i[1]
-		weight = i[2]
+    visitstatus[office] = True
 
-		try:
-			adjacencyList[nodeU].append(nodeV)
+    for i in adjacencyList:
+        key = i[0]
+        visitstatus.append({key: False})
 
-		except KeyError:
-			print("adding new location to Adjacency List")
-			adjacencyList.append({nodeU : nodeV})
-			print("updated adjacencyList")
+    print(visitstatus)
 
-	visitstatus = {}
-	mypaths = []
-	myqueue = []
-	myqueue.append(office)
+    while myqueue:
+        office = myqueue.pop(0)
 
-	visitstatus[office] = True
-	
-	for i in adjacencyList:
-		key = i[0]
-		visitstatus.append({key : False})
-	
-	print(visitstatus)
-	
-	while myqueue:
-		office = myqueue.pop(0)
+        for nextnode in map[office]:
+            if visitstatus[nextnode] == False:
+                myqueue.append(nextnode)
+                visitstatus[nextnode] = True
 
-		for nextnode in map[office]:
-			if visitstatus[nextnode] == False:
-				myqueue.append(nextnode)
-				visitstatus[nextnode] = True
-
-	return mypaths
+    return mypaths
 
 
 """
@@ -58,6 +43,7 @@ def dfs(map, office):
         for nextnode in map[office]:
             return dfs(map, nextnode)
 
+
 """
 Dijkstra's
 """
@@ -65,3 +51,23 @@ Dijkstra's
 
 def dijkstra(map, office):
     return
+
+
+def helpAdjList(input):
+    adjacencyList = defaultdict(list)
+    # build an adjacency dictionary
+    for i in input:
+
+        nodeU = i[0]
+        nodeV = i[1]
+        weight = i[2]
+
+        try:
+            adjacencyList[nodeU].append(nodeV)
+
+        except KeyError:
+            print("adding new location to Adjacency List")
+            adjacencyList.append({nodeU: nodeV})
+            print("updated adjacencyList")
+
+    return adjacencyList
