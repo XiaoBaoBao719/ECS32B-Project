@@ -1,3 +1,5 @@
+import heapq
+
 """
 BFS
 """
@@ -52,8 +54,21 @@ Dijkstra's
 
 
 def dijkstra(map, office):
-	
-    return
+    distances[office] = 0
+
+    pq = [(0, office)]
+    while pq:  # while pq is not empty
+        curDist, curVert = heapq.heappop((pq))  # current distance and current vertex
+
+        while curDist > distances[curVert]:
+            for nextNode, weight in map[curVert].items():
+                distance = curDist + weight
+
+                if distance < distances[nextNode]:
+                    distances[nextNode] = distance
+                    heapq.heappush()
+
+    return distances
 
 
 def helpAdjList(input):
