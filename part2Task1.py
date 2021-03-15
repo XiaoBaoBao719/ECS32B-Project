@@ -104,27 +104,55 @@ def dijkstra(map, office):
     return parent
 
 
-def helpAdjList(input):
-    adjacencyList = defaultdict(list)
-    # build an adjacency dictionary
+#takes list of edges and returns a 2D list array 
+def getAdjacencyMap(edges):
 
+	nodeMap = [[], []]
 
-    for i in input:
+	#build an adjacency matrix
+	locations = getLocations(edges)
+	numLocations = len(locations)
 
-        nodeU = i[0]
-        nodeV = i[1]
-        weight = i[2]
+	#print(sorted(locations))
 
-        try:
-            adjacencyList[nodeU].append(nodeV)
+	#create 3D matrix
+	nodeMap = [ [0] * numLocations for i in range(numLocations) ]
 
-        except KeyError:
-            print("adding new location to Adjacency List")
-            adjacencyList.append({nodeU: nodeV})
-            print("updated adjacencyList")
+	for u, v, weight in edges:
+	#	print(u)
+	#	print(v)
+	#	print(weight)
+		#weight = item[2]
+		index1 = locations.index(u)
+		index2 = locations.index(v)
 
-        return adjacencyList
+		nodeMap[index1][index2] = weight
+		nodeMap[index2][index1] = weight
 
+	#print(nodeMap)
+
+	return nodeMap
+
+#returns a sorted list of the locations
+def getLocations(edges):
+
+	uniqueLocations = {edges[0][0]}
+
+	for i in edges:
+
+		nodeU = i[0]
+		nodeV = i[1]
+		weight = i[2]
+
+		if(nodeU not in uniqueLocations):
+			uniqueLocations.add(nodeU)
+		if(nodeV not in uniqueLocations):
+			uniqueLocations.add(nodeV)
+
+	print("UNIQUE LOCATIONS:")
+	print(uniqueLocations)
+
+	return sorted(uniqueLocations)
 
 def shortestDist(distance, queue):
     minval = float("Inf")
