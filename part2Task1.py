@@ -149,8 +149,8 @@ def getLocations(edges):
 		if(nodeV not in uniqueLocations):
 			uniqueLocations.add(nodeV)
 
-	print("UNIQUE LOCATIONS:")
-	print(uniqueLocations)
+	#print("UNIQUE LOCATIONS:")
+	#print(uniqueLocations)
 
 	return sorted(uniqueLocations)
 
