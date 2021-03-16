@@ -1,6 +1,5 @@
 import heapq as heap
 from collections import defaultdict
-from array import *
 import math
 from array import *
 
@@ -158,7 +157,6 @@ Dijkstra's
 """
 
 
-<<<<<<< HEAD
 def dijkstra(map, office):
 
     # Creating andf using adjaceny Matrix
@@ -265,20 +263,11 @@ def getLocations(edges):
     uniqueLocations = {edges[0][0]}
 
     for i in edges:
-=======
-#takes list of edges and returns a 2D list array 
-def getAdjacencyMap(edges):
 
-	nodeMap = [[], []]
+        nodeU = i[0]
+        nodeV = i[1]
+        weight = i[2]
 
-	#build an adjacency matrix
-	locations = getLocations(edges)
-	numLocations = len(locations)
->>>>>>> f5595fd9547e45a041ed2d86c547e03b6ed132fa
-
-	#print(sorted(locations))
-
-<<<<<<< HEAD
         if (nodeU not in uniqueLocations):
             uniqueLocations.add(nodeU)
         if (nodeV not in uniqueLocations):
@@ -312,46 +301,6 @@ def allPaths(edges, source, destination):
             for v in adj_list[u]:
                 paths.append(path + [v])
     return result
-=======
-	#create 3D matrix
-	nodeMap = [ [0] * numLocations for i in range(numLocations) ]
-
-	for u, v, weight in edges:
-	#	print(u)
-	#	print(v)
-	#	print(weight)
-		#weight = item[2]
-		index1 = locations.index(u)
-		index2 = locations.index(v)
-
-		nodeMap[index1][index2] = weight
-		nodeMap[index2][index1] = weight
-
-	#print(nodeMap)
-
-	return nodeMap
-
-#returns a sorted list of the locations
-def getLocations(edges):
-
-	uniqueLocations = {edges[0][0]}
-
-	for i in edges:
-
-		nodeU = i[0]
-		nodeV = i[1]
-		weight = i[2]
-
-		if(nodeU not in uniqueLocations):
-			uniqueLocations.add(nodeU)
-		if(nodeV not in uniqueLocations):
-			uniqueLocations.add(nodeV)
-
-	#print("UNIQUE LOCATIONS:")
-	#print(uniqueLocations)
-
-	return sorted(uniqueLocations)
->>>>>>> f5595fd9547e45a041ed2d86c547e03b6ed132fa
 
 # TEST CASES
 # m = [('UPS', 'Brecon', 28), ('UPS', 'Owl Ranch', 20), ('UPS', 'Sunfield', 17), ('Jacob City', 'Brecon', 25), ('Sunfield', 'Owl Ranch', 0)]
@@ -369,9 +318,5 @@ def getLocations(edges):
 # val = bfs(m, 'UPS')
 # expected = {'UPS': ['UPS'], 'Steuben': ['UPS', 'Steuben'], 'Richmond Hill':['UPS', 'Steuben', 'Richmond Hill'], 'Owl Ranch': ['UPS', 'Steuben', 'Holly Ridge','Owl Ranch'], 'Diehlstadt': ['UPS', 'Steuben', 'Holly Ridge', 'Diehlstadt'], 'Sunfield': ['UPS', 'Steuben', 'Holly Ridge', 'Sunfield'], 'Holly Ridge': ['UPS', 'Steuben', 'Holly Ridge'], 'Hambleton': ['UPS', 'Steuben', 'Holly Ridge', 'Hambleton'], 'Jacob City': ['UPS', 'Steuben', 'Holly Ridge', 'Jacob City'], 'Brecon': ['UPS', 'Steuben', 'Holly Ridge', 'Sunfield', 'Brecon']}
 
-<<<<<<< HEAD
 #getAdjacencyMap(m)
 # print(val)
-=======
-print(dijkstra(m, val))
->>>>>>> f5595fd9547e45a041ed2d86c547e03b6ed132fa
