@@ -204,10 +204,10 @@ class Truck:
     def collectPackage(self, pk):
         print("COLLECTING")
         #print(pk.id)
-        print(pk.office)
-        print(pk.collected)
-        print(pk.delivered)
-        print(self.location)
+        #print(pk.office)
+        #print(pk.collected)
+        #print(pk.delivered)
+        #print(self.location)
 
         if pk == None:
             print("No package to pick up!")
@@ -299,13 +299,12 @@ class Truck:
         return list(destinations)
 
     def isDelivered(self, packId):
-        index = hashMe(packId.id, tableDim)
+        index = hashMe(packId, tableDim)
         return self.packagesDelivered[index]
 
     def getNumPackages(self):
-
         counter = 0
-        for i in range(len(self.packages)):
+        for i in self.packages:
             if(i is not None):
                 counter += 1
         return counter
@@ -348,13 +347,15 @@ def deliveryService(map, truck, packages):
         while (truck.getNumPackages() <= truck.size):
             if(undeliveredPackages):
                 truck.collectPackage(undeliveredPackages.pop())
+            else:
+                break
 
-        
-
+        print(truck.packages)
         
         #AS LONG AS THERE ARE PACKAGES IN TRUCK...
-        while truck.packages:
+        while truck.getNumPackages() > 0:
 
+            print("NUM PACKS: ", truck.getNumPackages())
             #GET THE TOPMOST PACKAGE ADDRESS, BLIND DRIVING
             topPack = truck.packages[0]
             destination = topPack.address
