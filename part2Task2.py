@@ -41,7 +41,7 @@ def getAdjacencyMap(edges):
 
         nodeMap[index1][index2] = weight
         nodeMap[index2][index1] = weight
-    print(locations)
+    #print(locations)
     # FOR CHECKING MATRIX
     # for i in range(len(nodeMap)):
     #     print(nodeMap[i])
@@ -203,7 +203,7 @@ class Truck:
 
     def collectPackage(self, pk):
         print("COLLECTING")
-        print(pk.id)
+        #print(pk.id)
         print(pk.office)
         print(pk.collected)
         print(pk.delivered)
@@ -302,6 +302,14 @@ class Truck:
         index = hashMe(pk.id, tableDim)
         return packagesDelivered[index]
 
+    def getNumPackages(self):
+
+        counter = 0
+        for i in range(len(self.packages)):
+            if(i is not None):
+                counter += 1
+        return counter
+
 """
 deliveryService
 """
@@ -315,25 +323,41 @@ def deliveryService(map, truck, packages):
     theLocations = getLocations(map)
 
     # Create Truck at location of UPS store
-    print(truck.id, truck.size, truck.location)
+    #print(truck.id, truck.size, truck.location)
     startLocation = truck.location
 
-    while (truck.packages <= truck.size):
-        truck.collectPackage(packages.pop())
 
     deliveredPackages = []
-    undeliveredPackages = packages[:]
 
-    while undeliveredPackages != []:
+    #The [:]  operation copies list by value instead of by reference
+    undeliveredPackages = packages[:]
+    #print(undeliveredPackages.pop())
+
+    #truck.collectPackage(undeliveredPackages.pop())
+
+    #while (truck.getNumPackages() <= truck.size):
+    #    if(undeliveredPackages):
+    #        truck.collectPackage(undeliveredPackages.pop())
+
+
+    #print(truck.packages)
+    
+    while undeliveredPackages:
 
         #PICK UP AS MANY UNDELIVERED PACKAGES AS TRUCK CAN HOLD
-        while truck.packages <= truck.size:
-            truck.collectPackage(undeliveredPackages.pop())
+        while (truck.getNumPackages() <= truck.size):
+            if(undeliveredPackages):
+                truck.collectPackage(undeliveredPackages.pop())
 
-        while not truck.packages != []:
+        
+
+        
+        #AS LONG AS THERE ARE PACKAGES IN TRUCK...
+        while truck.packages:
 
             #GET THE TOPMOST PACKAGE ADDRESS, BLIND DRIVING
-            destination = truck.packages.peek().address
+            topPack = truck.packages[0]
+            destination = topPack.address
 
             #CALCULATE THE ROUTE TO DESTINATION
             route = dijkstra(map, truck.location, destination)
@@ -356,7 +380,9 @@ def deliveryService(map, truck, packages):
 
         #GO BACK TO POST OFFICE TO GET MORE PACKAGES
         routeOffice = dijkstra(map, truck.location, startLocation)
+    
 
+    print(deliveredTo, stops)
     return (deliveredTo, stops)
 
 
@@ -364,8 +390,22 @@ def deliveryService(map, truck, packages):
 
 m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
 o = 'UPS'
-packages = [('pk1', 'UPS', 'Brecon'), ('pk2', 'UPS', 'Jacob City'), ('pk3', 'UPS', 'Owl Ranch'),
-            ('pk4', 'UPS', 'Sunfield')]
+
+pk1 = Package('pk1')
+pk1.address = 'Brecon'
+pk2 = Package('pk2')
+pk2.address = 'Jacob City'
+pk3 = Package('pk3')
+pk3.address = 'Owl Ranch'
+pk4 = Package('pk4')
+pk4.address = 'Sunfield'
+
+packages = [pk1, pk2, pk3, pk4]
+
+for i in packages:
+    i.office = 'UPS'
+
+#print(packages)
 
 truck = Truck(69, 20, o)
 deliveryService(m, truck, packages)
