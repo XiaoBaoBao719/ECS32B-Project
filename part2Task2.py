@@ -299,8 +299,8 @@ class Truck:
         return list(destinations)
 
     def isDelivered(self, packId):
-        index = hashMe(pk.id, tableDim)
-        return packagesDelivered[index]
+        index = hashMe(packId.id, tableDim)
+        return self.packagesDelivered[index]
 
     def getNumPackages(self):
 
