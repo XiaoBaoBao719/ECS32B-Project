@@ -5,6 +5,7 @@ import math
 from collections import defaultdict
 from array import *
 
+
 class Queue:
     def __init__(self):
         self.items = []
@@ -41,7 +42,7 @@ def getAdjacencyMap(edges):
 
         nodeMap[index1][index2] = weight
         nodeMap[index2][index1] = weight
-    #print(locations)
+    # print(locations)
     # FOR CHECKING MATRIX
     # for i in range(len(nodeMap)):
     #     print(nodeMap[i])
@@ -72,14 +73,15 @@ def getLocations(edges):
 Dijkstra's
 """
 
-def dijkstra(map, office, destination): #now taking a destination path
+
+def dijkstra(map, office, destination):  # now taking a destination path
     matrix = getAdjacencyMap(map)
     locations = getLocations(map)
 
     row = len(matrix)
     col = len(matrix[0])
 
-    #distances = [math.inf] * row
+    # distances = [math.inf] * row
     distances = [float('inf')] * row
     parent = [-1] * row
 
@@ -91,7 +93,7 @@ def dijkstra(map, office, destination): #now taking a destination path
         myqueue.append(i)
     route = []
     while myqueue:
-        #shortDist = math.inf  # shortest distance
+        # shortDist = math.inf  # shortest distance
         shortDist = float('inf')
         shortIndex = -1  # shortest index, will check if previous node has shorter distance than current node
 
@@ -108,28 +110,28 @@ def dijkstra(map, office, destination): #now taking a destination path
                     distances[i] = distances[shortIndex] + matrix[shortIndex][i]
                     parent[i] = shortIndex
 
-
     finalpaths = []
     templist = []
 
     for i in range(len(matrix)):
-        #if i != office and distances[i] != math.inf:
+        # if i != office and distances[i] != math.inf:
         if i != office and distances[i] != float('inf'):
             get_route(parent, i, route)
             for q in range(len(route)):
                 templist.append(locations[route[q]])
             finalpaths.append(list(templist))
-            #route.clear()
+            # route.clear()
             del route[:]
-            #templist.clear()
+            # templist.clear()
             del templist[:]
-    #print(finalpaths)
+    # print(finalpaths)
 
     finalDict = dict(zip(getLocations(map), finalpaths))
 
     shortPathDest = finalDict[destination]
-    #print(shortPathDest)
+    # print(shortPathDest)
     return shortPathDest
+
 
 def get_route(prev, i, route):
     if i >= 0:
@@ -146,12 +148,14 @@ class Package:
         self.collected = False
         self.delivered = False
 
+
 """
 @parameter id - integer value number that represents the package tracking number
            tableSize - the size of the hash table 
 @precondition: both id and tableSize must be integer values
 @return: method returns an integer value i such that 0 <= i <= tableSize
 """
+
 
 def hashMe(id, tableSize):
     nums2 = 0
@@ -203,11 +207,11 @@ class Truck:
 
     def collectPackage(self, pk):
         print("COLLECTING")
-        #print(pk.id)
-        #print(pk.office)
-        #print(pk.collected)
-        #print(pk.delivered)
-        #print(self.location)
+        # print(pk.id)
+        # print(pk.office)
+        # print(pk.collected)
+        # print(pk.delivered)
+        # print(self.location)
 
         if pk == None:
             print("No package to pick up!")
@@ -244,7 +248,7 @@ class Truck:
         index = hashMe(pk.id, tableDim)
         if self.location == pk.address and self.packages[index] is not None:
             self.packagesDelivered[index] = True
-            #self.packagesDelivered.append(pk.id)
+            # self.packagesDelivered.append(pk.id)
             self.packages[index] = None
         else:
             print("Truck is not at the correct delivery address!")
@@ -258,7 +262,7 @@ class Truck:
             if (self.packages[i] != None) and (
                     self.location == self.packages.address[i]):  # updating (self.location == self.packages[i].address)
                 self.packagesDelivered[i] = True
-                #self.packagesDelivered.append(self.packages.id)
+                # self.packagesDelivered.append(self.packages.id)
                 self.packages[i] = None
         else:
             print("Can not deliver packages")
@@ -268,7 +272,7 @@ class Truck:
         print(pk.office)
         index = hashMe(pk.id, tableDim)
         if self.packages[index] is not None:
-            self.packages.office[index] = self.location #updating self.packages[index].office = self.location -Gianni
+            self.packages.office[index] = self.location  # updating self.packages[index].office = self.location -Gianni
             pk.delivered = False
             pk.collected = False
             self.packages[index] = None
@@ -286,7 +290,7 @@ class Truck:
         idList = []
         for i in range(len(self.packages)):
             if self.packages[i] is not None:
-                idList.append(self.packages.id[i]) #updating idList.append(self.packages[i].id)
+                idList.append(self.packages.id[i])  # updating idList.append(self.packages[i].id)
 
         return idList
 
@@ -305,13 +309,15 @@ class Truck:
     def getNumPackages(self):
         counter = 0
         for i in self.packages:
-            if(i is not None):
+            if (i is not None):
                 counter += 1
         return counter
+
 
 """
 deliveryService
 """
+
 
 def deliveryService(map, truck, packages):
     deliveredTo = {}
@@ -322,51 +328,49 @@ def deliveryService(map, truck, packages):
     theLocations = getLocations(map)
 
     # Create Truck at location of UPS store
-    #print(truck.id, truck.size, truck.location)
+    # print(truck.id, truck.size, truck.location)
     startLocation = truck.location
-
 
     deliveredPackages = []
 
-    #The [:]  operation copies list by value instead of by reference
+    # The [:]  operation copies list by value instead of by reference
     undeliveredPackages = packages[:]
-    #print(undeliveredPackages.pop())
+    # print(undeliveredPackages.pop())
 
-    #truck.collectPackage(undeliveredPackages.pop())
+    # truck.collectPackage(undeliveredPackages.pop())
 
-    #while (truck.getNumPackages() <= truck.size):
+    # while (truck.getNumPackages() <= truck.size):
     #    if(undeliveredPackages):
     #        truck.collectPackage(undeliveredPackages.pop())
 
+    # print(truck.packages)
 
-    #print(truck.packages)
-    
     while undeliveredPackages:
 
-        #PICK UP AS MANY UNDELIVERED PACKAGES AS TRUCK CAN HOLD
+        # PICK UP AS MANY UNDELIVERED PACKAGES AS TRUCK CAN HOLD
         while (truck.getNumPackages() <= truck.size):
-            if(undeliveredPackages):
+            if (undeliveredPackages):
                 truck.collectPackage(undeliveredPackages.pop())
             else:
                 break
 
         print(truck.packages)
-        
-        #AS LONG AS THERE ARE PACKAGES IN TRUCK...
+
+        # AS LONG AS THERE ARE PACKAGES IN TRUCK...
         while truck.getNumPackages() > 0:
 
             print("NUM PACKS: ", truck.getNumPackages())
-            #GET THE TOPMOST PACKAGE ADDRESS, BLIND DRIVING
+            # GET THE TOPMOST PACKAGE ADDRESS, BLIND DRIVING
             topPack = truck.packages[0]
             destination = topPack.address
 
-            #CALCULATE THE ROUTE TO DESTINATION
+            # CALCULATE THE ROUTE TO DESTINATION
             route = dijkstra(map, truck.location, destination)
 
-            #AT EACH CITY:
-            #-DRIVE TO CITY
-            #-DELIVER PACKAGES TO CURRENT CITY
-            #-LOOP THROUGH PACKAGE LIST AND UPDATE deliveredTo SO WE KNOW WHAT HAS BEEN DELIVERED
+            # AT EACH CITY:
+            # -DRIVE TO CITY
+            # -DELIVER PACKAGES TO CURRENT CITY
+            # -LOOP THROUGH PACKAGE LIST AND UPDATE deliveredTo SO WE KNOW WHAT HAS BEEN DELIVERED
             for currentCity in route:
                 truck.driveTo(currentCity)
                 truck.deliverPackages()
@@ -379,9 +383,8 @@ def deliveryService(map, truck, packages):
 
             print("Current packages: ", truck.packages)
 
-        #GO BACK TO POST OFFICE TO GET MORE PACKAGES
+        # GO BACK TO POST OFFICE TO GET MORE PACKAGES
         routeOffice = dijkstra(map, truck.location, startLocation)
-    
 
     print(deliveredTo, stops)
     return (deliveredTo, stops)
@@ -406,7 +409,7 @@ packages = [pk1, pk2, pk3, pk4]
 for i in packages:
     i.office = 'UPS'
 
-#print(packages)
+# print(packages)
 
 truck = Truck(69, 20, o)
 deliveryService(m, truck, packages)
