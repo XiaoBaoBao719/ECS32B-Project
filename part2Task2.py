@@ -6,6 +6,7 @@ from collections import defaultdict
 from array import *
 import math
 
+
 class Queue:
     def __init__(self):
         self.items = []
@@ -22,6 +23,7 @@ class Queue:
     def size(self):
         return len(self.items)
 
+
 def getAdjacencyMap(edges):
     nodeMap = [[], []]
     # build an adjacency matrix
@@ -31,7 +33,7 @@ def getAdjacencyMap(edges):
 
     # create 3D matrix
     nodeMap = [[-1] * numLocations for i in range(numLocations)]
-    #print(nodeMap)
+    # print(nodeMap)
     for u, v, weight in edges:
         #    print(u)
         #    print(v)
@@ -42,11 +44,10 @@ def getAdjacencyMap(edges):
         nodeMap[index1][index2] = weight
         nodeMap[index2][index1] = weight
     print(locations)
-    #FOR CHECKING MATRIX
+    # FOR CHECKING MATRIX
     # for i in range(len(nodeMap)):
     #     print(nodeMap[i])
     #     print("\n")
-
 
     return nodeMap
 
@@ -67,11 +68,15 @@ def getLocations(edges):
             uniqueLocations.add(nodeV)
 
     return sorted(uniqueLocations)
+
+
 """
 BFS
 """
+
+
 def bfs(map, office):
-    #A DICTIONARY OF THE PATHS FROM SOURCE TO EACH UNIQUE DESTINATION
+    # A DICTIONARY OF THE PATHS FROM SOURCE TO EACH UNIQUE DESTINATION
     mypaths = {}
     # for destination in getLocations(map):
     for destination in getLocations(map):
@@ -81,33 +86,34 @@ def bfs(map, office):
 
     return mypaths
 
-def bfsHelper(map, start, destination):
 
+def bfsHelper(map, start, destination):
     myqueue = []
     myqueue.append([start])
     visited = []
 
     while myqueue:
-            currentPath = myqueue.pop(0)
-            visited.append(currentPath[-1])
-            #print(myqueue)
-            lastItem = currentPath[-1]
-            curIndex = getLocations(map).index(lastItem)
-            adjIndices = [index for index, element in enumerate(getAdjacencyMap(map)[curIndex]) if element >= 0]
+        currentPath = myqueue.pop(0)
+        visited.append(currentPath[-1])
+        # print(myqueue)
+        lastItem = currentPath[-1]
+        curIndex = getLocations(map).index(lastItem)
+        adjIndices = [index for index, element in enumerate(getAdjacencyMap(map)[curIndex]) if element >= 0]
 
-            if(lastItem == destination):
-                return currentPath
+        if (lastItem == destination):
+            return currentPath
 
-            adjVertices = []
-            for i in adjIndices:
-                adjVertices.append(getLocations(map)[i])
+        adjVertices = []
+        for i in adjIndices:
+            adjVertices.append(getLocations(map)[i])
 
-            for adjacent in adjVertices:
-                if(adjacent not in visited):
-                    newPath = list(currentPath)
-                    #print(newPath)
-                    newPath.append(adjacent)
-                    myqueue.append(newPath)
+        for adjacent in adjVertices:
+            if (adjacent not in visited):
+                newPath = list(currentPath)
+                # print(newPath)
+                newPath.append(adjacent)
+                myqueue.append(newPath)
+
 
 class Package:
     def __init__(self, id):
@@ -118,12 +124,14 @@ class Package:
         self.collected = False
         self.delivered = False
 
+
 """
 @parameter id - integer value number that represents the package tracking number
            tableSize - the size of the hash table 
 @precondition: both id and tableSize must be integer values
 @return: method returns an integer value i such that 0 <= i <= tableSize
 """
+
 
 def hashMe(id, tableSize):
     nums2 = 0
@@ -160,7 +168,9 @@ def hashMe(id, tableSize):
     # Returns index (key)
     return int(middleNums) % tableSize
 
+
 tableDim = 20
+
 
 class Truck:
 
@@ -169,7 +179,7 @@ class Truck:
         self.size = n
         self.location = loc
         self.packages = [None] * self.size
-        self.packagesDelivered = [] * self.size
+        self.packagesDelivered = [False] * self.size
 
     def collectPackage(self, pk):
         print("COLLECTING")
@@ -184,8 +194,8 @@ class Truck:
             return
         # Push into some data structure, taking out of postal service
 
-        #curNumPkgs = len(getPackagesIds())
-        #print(len(getPackagesIds()))
+        # curNumPkgs = len(getPackagesIds())
+        # print(len(getPackagesIds()))
 
         curNumPkgs = 0
 
@@ -198,12 +208,12 @@ class Truck:
         index = hashMe(pk.id, len(self.packages))
 
         if self.location == pk.office:
-            if(curNumPkgs < self.size):
+            if (curNumPkgs < self.size):
                 pk.collected = True
                 self.packages[index] = pk
             else:
                 print("Can't fit anymore packages")
-            #self.packages[index].collected = True
+            # self.packages[index].collected = True
         else:
             print("Truck is not at postal office!")
 
@@ -212,7 +222,7 @@ class Truck:
         print('DELIVERING ONE PACKAGES')
         index = hashMe(pk.id, tableDim)
         if self.location == pk.address and self.packages[index] is not None:
-            self.packages[index].delivered = True
+            self.packagesDelivered[index] = True
             self.packagesDelivered.append(pk.id)
             self.packages[index] = None
         else:
@@ -224,9 +234,10 @@ class Truck:
         # if self.location == pk.location:
         print("Delivering LOTS OF PACKAGES")
         for i in range(len(self.packages)):
-            if (self.packages[i] != None) and (self.location == self.packages[i].address):
-                self.packages[i].delivered = True
-                self.packagesDelivered.append(pk.id)
+            if (self.packages[i] != None) and (
+                    self.location == self.packages.address[i]):  # updating (self.location == self.packages[i].address)
+                self.packagesDelivered[i] = True
+                self.packagesDelivered.append(self.packages.id)
                 self.packages[i] = None
         else:
             print("Can not deliver packages")
@@ -236,7 +247,7 @@ class Truck:
         print(pk.office)
         index = hashMe(pk.id, tableDim)
         if self.packages[index] is not None:
-            self.packages[index].office = self.location
+            self.packages.office[index] = self.location #updating self.packages[index].office = self.location -Gianni
             pk.delivered = False
             pk.collected = False
             self.packages[index] = None
@@ -254,17 +265,19 @@ class Truck:
         idList = []
         for i in range(len(self.packages)):
             if self.packages[i] is not None:
-                idList.append(self.packages[i].id)
+                idList.append(self.packages.id[i]) #updating idList.append(self.packages[i].id)
 
         return idList
 
     def getDeliveryDestinations(self):
-		destinations = {()}
+        destinations = {()}
 
-		for pkg in self.packages:
-			print(pkg)
-			destinations.add(pkg.address)
-		return list(destinations)
+        for pkg in self.packages:
+            print(pkg)
+            destinations.add(pkg.address)
+        return list(destinations)
+
+
 """
 	def isDelivered(self, packId):
 		if(packId in self.packagesDelivered):
@@ -275,85 +288,56 @@ class Truck:
 """
 deliveryService
 """
+
+
 def deliveryService(map, truck, packages):
-	deliveredTo = {}
-	stops = []
+    deliveredTo = {}
+    stops = []
 
     # write your code here
-	theMap = getAdjacencyMap(map)
-	theStops = getLocations(map)
+    theMap = getAdjacencyMap(map)
+    theStops = getLocations(map)
 
-    #Create Truck at location of UPS store
-	print(truck.id, truck.size, truck.location)
+    # Create Truck at location of UPS store
+    print(truck.id, truck.size, truck.location)
 
-	while (truck.packages <= truck.size):
-			truck.collectPackage(packages.pop())
+    while (truck.packages <= truck.size):
+        truck.collectPackage(packages.pop())
 
-	print(truck.packages)
-	#destinations = truck.getDeliveryDestinations()
-	#print(destinations)
+    print(truck.packages)
+    # destinations = truck.getDeliveryDestinations()
+    # print(destinations)
 
-	while not truck.packages == []:
+    while not truck.packages == []:
 
-		#look at address for topmost package
-		destination = truck.packages.peek().address
-		#calculate a route to package address
-		route = bfsHelper(map, truck.location, destination)
+        # look at address for topmost package
+        destination = truck.packages.peek().address
+        # calculate a route to package address
+        route = bfsHelper(map, truck.location, destination)
 
-		#for each location along the route, move the truck and try to
-		#deliver packages along the way
-		for currentLocation in route:
-			truck.driveTo(currentLocation)
-			truck.deliverPackages()
-			#check to see which packages were delivered and update the deliveredTo dict
-			for package in truck.packages:
-				if truck.isDelivered(package.id):
-					deliveredTo.update({package.id : package.address})
+        # for each location along the route, move the truck and try to
+        # deliver packages along the way
+        for currentLocation in route:
+            truck.driveTo(currentLocation)
+            truck.deliverPackages()
+            # check to see which packages were delivered and update the deliveredTo dict
+            for package in truck.packages:
+                if truck.isDelivered(package.id):
+                    deliveredTo.update({package.id: package.address})
 
-			stops.append(currentLocation)
+            stops.append(currentLocation)
 
-		print("Current packages: ", truck.packages)
+        print("Current packages: ", truck.packages)
 
-	return (deliveredTo, stops)
+    return (deliveredTo, stops)
 
 
-
-#DRIVER CODE
+# DRIVER CODE
 
 m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
 o = 'UPS'
-packages = [('pk1', 'UPS', 'Brecon'), ('pk2', 'UPS', 'Jacob City'), ('pk3', 'UPS', 'Owl Ranch'), ('pk4', 'UPS', 'Sunfield')]
+packages = [('pk1', 'UPS', 'Brecon'), ('pk2', 'UPS', 'Jacob City'), ('pk3', 'UPS', 'Owl Ranch'),
+            ('pk4', 'UPS', 'Sunfield')]
 
 truck = Truck(69, 20, o)
 deliveryService(m, truck, packages)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
