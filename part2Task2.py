@@ -4,8 +4,6 @@ Copy your Package and Truck classes here
 import math
 from collections import defaultdict
 from array import *
-import math
-
 
 class Queue:
     def __init__(self):
@@ -71,48 +69,72 @@ def getLocations(edges):
 
 
 """
-BFS
+Dijkstra's
 """
 
+def dijkstra(map, office, destination): #now taking a destination path
+    matrix = getAdjacencyMap(map)
+    locations = getLocations(map)
 
-def bfs(map, office):
-    # A DICTIONARY OF THE PATHS FROM SOURCE TO EACH UNIQUE DESTINATION
-    mypaths = {}
-    # for destination in getLocations(map):
-    for destination in getLocations(map):
-        validPath = bfsHelper(map, office, destination)
-        # UPDATE PATH DICTIONARY WITH NEW KEY:PATH PAIRING
-        mypaths.update({destination: validPath})
+    row = len(matrix)
+    col = len(matrix[0])
 
-    return mypaths
+    #distances = [math.inf] * row
+    distances = [float('inf')] * row
+    parent = [-1] * row
 
+    officeIndex = getLocations(map).index('UPS')  # Setting office distance from itself equal to zero
+    distances[officeIndex] = 0
 
-def bfsHelper(map, start, destination):
     myqueue = []
-    myqueue.append([start])
-    visited = []
-
+    for i in range(row):
+        myqueue.append(i)
+    route = []
     while myqueue:
-        currentPath = myqueue.pop(0)
-        visited.append(currentPath[-1])
-        # print(myqueue)
-        lastItem = currentPath[-1]
-        curIndex = getLocations(map).index(lastItem)
-        adjIndices = [index for index, element in enumerate(getAdjacencyMap(map)[curIndex]) if element >= 0]
+        #shortDist = math.inf  # shortest distance
+        shortDist = float('inf')
+        shortIndex = -1  # shortest index, will check if previous node has shorter distance than current node
 
-        if (lastItem == destination):
-            return currentPath
+        for k in range(len(matrix)):
+            if distances[k] < shortDist and k in myqueue:
+                shortDist = distances[k]
+                shortIndex = k
 
-        adjVertices = []
-        for i in adjIndices:
-            adjVertices.append(getLocations(map)[i])
+        myqueue.remove(shortIndex)
 
-        for adjacent in adjVertices:
-            if (adjacent not in visited):
-                newPath = list(currentPath)
-                # print(newPath)
-                newPath.append(adjacent)
-                myqueue.append(newPath)
+        for i in range(col):
+            if matrix[shortIndex][i] >= 0 and i in myqueue:
+                if distances[shortIndex] + matrix[shortIndex][i] < distances[i]:
+                    distances[i] = distances[shortIndex] + matrix[shortIndex][i]
+                    parent[i] = shortIndex
+
+
+    finalpaths = []
+    templist = []
+
+    for i in range(len(matrix)):
+        #if i != office and distances[i] != math.inf:
+        if i != office and distances[i] != float('inf'):
+            get_route(parent, i, route)
+            for q in range(len(route)):
+                templist.append(locations[route[q]])
+            finalpaths.append(list(templist))
+            #route.clear()
+            del route[:]
+            #templist.clear()
+            del templist[:]
+    #print(finalpaths)
+
+    finalDict = dict(zip(getLocations(map), finalpaths))
+
+    shortPathDest = finalDict[destination]
+    #print(shortPathDest)
+    return shortPathDest
+
+def get_route(prev, i, route):
+    if i >= 0:
+        get_route(prev, prev[i], route)
+        route.append(i)
 
 
 class Package:
@@ -124,14 +146,12 @@ class Package:
         self.collected = False
         self.delivered = False
 
-
 """
 @parameter id - integer value number that represents the package tracking number
            tableSize - the size of the hash table 
 @precondition: both id and tableSize must be integer values
 @return: method returns an integer value i such that 0 <= i <= tableSize
 """
-
 
 def hashMe(id, tableSize):
     nums2 = 0
@@ -211,6 +231,7 @@ class Truck:
             if (curNumPkgs < self.size):
                 pk.collected = True
                 self.packages[index] = pk
+                self.packagesDelivered[index] = False
             else:
                 print("Can't fit anymore packages")
             # self.packages[index].collected = True
@@ -223,7 +244,7 @@ class Truck:
         index = hashMe(pk.id, tableDim)
         if self.location == pk.address and self.packages[index] is not None:
             self.packagesDelivered[index] = True
-            self.packagesDelivered.append(pk.id)
+            #self.packagesDelivered.append(pk.id)
             self.packages[index] = None
         else:
             print("Truck is not at the correct delivery address!")
@@ -237,7 +258,7 @@ class Truck:
             if (self.packages[i] != None) and (
                     self.location == self.packages.address[i]):  # updating (self.location == self.packages[i].address)
                 self.packagesDelivered[i] = True
-                self.packagesDelivered.append(self.packages.id)
+                #self.packagesDelivered.append(self.packages.id)
                 self.packages[i] = None
         else:
             print("Can not deliver packages")
@@ -277,18 +298,13 @@ class Truck:
             destinations.add(pkg.address)
         return list(destinations)
 
+    def isDelivered(self, packId):
+        index = hashMe(pk.id, tableDim)
+        return packagesDelivered[index]
 
-"""
-	def isDelivered(self, packId):
-		if(packId in self.packagesDelivered):
-			return True
-		else:
-			return False
-"""
 """
 deliveryService
 """
-
 
 def deliveryService(map, truck, packages):
     deliveredTo = {}
@@ -296,38 +312,50 @@ def deliveryService(map, truck, packages):
 
     # write your code here
     theMap = getAdjacencyMap(map)
-    theStops = getLocations(map)
+    theLocations = getLocations(map)
 
     # Create Truck at location of UPS store
     print(truck.id, truck.size, truck.location)
+    startLocation = truck.location
 
     while (truck.packages <= truck.size):
         truck.collectPackage(packages.pop())
 
-    print(truck.packages)
-    # destinations = truck.getDeliveryDestinations()
-    # print(destinations)
+    deliveredPackages = []
+    undeliveredPackages = packages[:]
 
-    while not truck.packages == []:
+    while undeliveredPackages != []:
 
-        # look at address for topmost package
-        destination = truck.packages.peek().address
-        # calculate a route to package address
-        route = bfsHelper(map, truck.location, destination)
+        #PICK UP AS MANY UNDELIVERED PACKAGES AS TRUCK CAN HOLD
+        while truck.packages <= truck.size:
+            truck.collectPackage(undeliveredPackages.pop())
 
-        # for each location along the route, move the truck and try to
-        # deliver packages along the way
-        for currentLocation in route:
-            truck.driveTo(currentLocation)
-            truck.deliverPackages()
-            # check to see which packages were delivered and update the deliveredTo dict
-            for package in truck.packages:
-                if truck.isDelivered(package.id):
-                    deliveredTo.update({package.id: package.address})
+        while not truck.packages != []:
 
-            stops.append(currentLocation)
+            #GET THE TOPMOST PACKAGE ADDRESS, BLIND DRIVING
+            destination = truck.packages.peek().address
 
-        print("Current packages: ", truck.packages)
+            #CALCULATE THE ROUTE TO DESTINATION
+            route = dijkstra(map, truck.location, destination)
+
+            #AT EACH CITY:
+            #-DRIVE TO CITY
+            #-DELIVER PACKAGES TO CURRENT CITY
+            #-LOOP THROUGH PACKAGE LIST AND UPDATE deliveredTo SO WE KNOW WHAT HAS BEEN DELIVERED
+            for currentCity in route:
+                truck.driveTo(currentCity)
+                truck.deliverPackages()
+
+                # check to see which packages were delivered and update the deliveredTo dict
+                for package in truck.packages:
+                    if truck.isDelivered(package.id):
+                        deliveredTo.update({package.id: package.address})
+                stops.append(currentCity)
+
+            print("Current packages: ", truck.packages)
+
+        #GO BACK TO POST OFFICE TO GET MORE PACKAGES
+        routeOffice = dijkstra(map, truck.location, startLocation)
 
     return (deliveredTo, stops)
 
