@@ -363,7 +363,6 @@ def deliveryService(map, truck, packages):
         #AS LONG AS THERE ARE PACKAGES IN TRUCK...
         while allDestinations:
 
-
             print("NUM PACKS: ", truck.getNumPackages())
             #GET THE TOPMOST PACKAGE ADDRESS, BLIND DRIVING
             #Blindly Drive somewhere
