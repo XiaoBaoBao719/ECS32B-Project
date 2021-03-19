@@ -429,6 +429,7 @@ def deliveryService(map, truck, packages):
 
 
 #DRIVER CODE
+<<<<<<< HEAD
 
 # m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
 # o = 'UPS'
@@ -451,3 +452,29 @@ def deliveryService(map, truck, packages):
 #
 # truck = Truck(69, 20, o)
 # deliveryService(m, truck, packages)
+=======
+"""
+m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
+o = 'UPS'
+
+pk1 = Package('pk1')
+pk1.address = 'Brecon'
+pk2 = Package('pk2')
+pk2.address = 'Jacob City'
+pk3 = Package('pk3')
+pk3.address = 'Owl Ranch'
+pk4 = Package('pk4')
+pk4.address = 'Sunfield'
+
+packages = [pk1, pk2, pk3, pk4]
+
+for i in packages:
+    i.office = 'UPS'
+
+# print(packages)
+
+truck = Truck(69, 20, o)
+deliveryService(m, truck, packages)
+"""
+#test
+
