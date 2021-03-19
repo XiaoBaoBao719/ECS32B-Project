@@ -238,6 +238,7 @@ class Truck:
             if (curNumPkgs < self.size):
                 pk.collected = True
                 self.packages[index] = pk
+                print(self.packages)
                 self.packagesDelivered[index] = False
             else:
                 print("Can't fit anymore packages")
@@ -263,17 +264,19 @@ class Truck:
         print("Delivering LOTS OF PACKAGES")
 
         for i in range(len(self.packages)):
-            currentPackage = self.packages[i]
+            #print(self.location + " Line 266")
+            #currentPackage = self.packages[i]
             # print(currentPackage, self.packages.address)
-            if (self.packages[i] is not None) and (
-                    self.location == getattr(self.packages[i],
-                                             'address')):  # self.packages[i].address):
+            if (self.packages[i] is not None) and (self.location == getattr(self.packages[i], 'address')):
+                # self.packages[i].address):
+                #print(getattr(self.packages[i], 'address') + " Line 271")
                 #print(getattr(self.packages[i], 'address'))
                 self.packagesDelivered[i] = True
+                print(self.packagesDelivered)
                 # self.packagesDelivered.append(self.packages.id)
                 self.packages[i] = None
             if self.packages[i] == None:
-                continue
+                print("I can not deliver a none-existent package")
             else:
                 print("Can not deliver packages")
 
@@ -395,13 +398,14 @@ def deliveryService(map, truck, packages):
             for currentCity in route:
                 truck.driveTo(currentCity)
                 truck.deliverPackages()
-
+                print(currentCity)
                 # REMOVE CITY FROM DESTINATIONS LIST SINCE WE ARE VISITING AND DELIVERING
                 if currentCity in allDestinations:
                     allDestinations.remove(currentCity)
 
                 # check to see which packages were delivered and update the deliveredTo dict
                 for packId in allPackageIds:
+
                     #print(packId)
                     #print(truck.isDelivered(packId))
                     if truck.isDelivered(packId):
@@ -426,24 +430,24 @@ def deliveryService(map, truck, packages):
 
 #DRIVER CODE
 
-m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
-o = 'UPS'
-
-pk1 = Package('pk1')
-pk1.address = 'Brecon'
-pk2 = Package('pk2')
-pk2.address = 'Jacob City'
-pk3 = Package('pk3')
-pk3.address = 'Owl Ranch'
-pk4 = Package('pk4')
-pk4.address = 'Sunfield'
-
-packages = [pk1, pk2, pk3, pk4]
-
-for i in packages:
-    i.office = 'UPS'
-
-# print(packages)
-
-truck = Truck(69, 20, o)
-deliveryService(m, truck, packages)
+# m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
+# o = 'UPS'
+#
+# pk1 = Package('pk1')
+# pk1.address = 'Brecon'
+# pk2 = Package('pk2')
+# pk2.address = 'Jacob City'
+# pk3 = Package('pk3')
+# pk3.address = 'Owl Ranch'
+# pk4 = Package('pk4')
+# pk4.address = 'Sunfield'
+#
+# packages = [pk1, pk2, pk3, pk4]
+#
+# for i in packages:
+#     i.office = 'UPS'
+#
+# # print(packages)
+#
+# truck = Truck(69, 20, o)
+# deliveryService(m, truck, packages)
