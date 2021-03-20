@@ -418,13 +418,13 @@ def deliveryService(map, truck, packages):
                 addressToVisit = pkg.address
                 completeDriveThrough(truck, map, addressToVisit, stops)
 
-                
+
                 #print("PACKAGE IS TYPE: ", type(pkg))
 
                 for pkg in truck.packages:
-                    if pkg.address == addressToVisit:
-                        truck.deliveredPackages(pkg)
-                        deliveredTo.add(pkg.id, pkg.address)
+                    if pkg is not None and pkg.address == addressToVisit:
+                        truck.deliverOnePackage(pkg)
+                        deliveredTo[pkg.id] = pkg.address
 
 
         completeDriveThrough(truck, map, office, stops)
