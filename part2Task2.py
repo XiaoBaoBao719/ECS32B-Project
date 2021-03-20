@@ -298,6 +298,15 @@ class Truck:
                 counter += 1
         return counter
 
+    def getPackages(self):
+        packages = []
+        for i in self.packages:
+            if i is not None:
+                packages.append(i)
+
+        return packages
+
+
 """
 deliveryService
 """
@@ -371,97 +380,11 @@ def completeDriveThrough(truck, adj, destination, stop):
 
 
 def deliveryService(map, truck, packages):
-    """
-    deliveredTo = {}
-    stops = []
 
-    # write your code here
-    theMap = getAdjacencyMap(map)
-    theLocations = getLocations(map)
-
-    # Create Truck at location of UPS store
-    # print(truck.id, truck.size, truck.location)
-    startLocation = truck.location
-
-    # packIds = []
-    deliveredPackages = []
-
-    # The [:]  operation copies list by value instead of by reference
-    undeliveredPackages = packages[:]
-    # print(undeliveredPackages.pop())
-
-    # truck.collectPackage(undeliveredPackages.pop())
-
-    # while (truck.getNumPackages() <= truck.size):
-    #    if(undeliveredPackages):
-    #        truck.collectPackage(undeliveredPackages.pop())
-
-    # print(truck.packages)
-
-    while undeliveredPackages:
-
-        # PICK UP AS MANY UNDELIVERED PACKAGES AS TRUCK CAN HOLD
-        while truck.getNumPackages() < truck.size:
-            if undeliveredPackages:
-                curPack = undeliveredPackages.pop()
-                # packIds.append(curPack.id)
-                truck.collectPackage(curPack)
-            else:
-                break
-
-        print(truck.packages)
-
-        allDestinations = truck.getDeliveryDestinations()
-        allPackageIds = truck.getPackageIds()
-
-        # AS LONG AS THERE ARE PACKAGES IN TRUCK...
-        while allDestinations:
-
-            print("NUM PACKS: ", truck.getNumPackages())
-            # GET THE TOPMOST PACKAGE ADDRESS, BLIND DRIVING
-            # Blindly Drive somewhere
-            destination = allDestinations.pop()
-
-            # CALCULATE THE ROUTE TO DESTINATION
-            route = dijkstra(map, truck.location, destination)
-
-            # AT EACH CITY:
-            # -DRIVE TO CITY
-            # -DELIVER PACKAGES TO CURRENT CITY
-            # -LOOP THROUGH PACKAGE LIST AND UPDATE deliveredTo SO WE KNOW WHAT HAS BEEN DELIVERED
-            for currentCity in route:
-                truck.driveTo(currentCity)
-                truck.deliverPackages()
-                print(currentCity)
-                # REMOVE CITY FROM DESTINATIONS LIST SINCE WE ARE VISITING AND DELIVERING
-                if currentCity in allDestinations:
-                    allDestinations.remove(currentCity)
-
-                # check to see which packages were delivered and update the deliveredTo dict
-                for packId in allPackageIds:
-
-                    #print(packId)
-                    #print(truck.isDelivered(packId))
-                    if truck.isDelivered(packId):
-                        deliveredTo.update({packId: currentCity})  # "Stamped Delivered"
-                        deliveredPackages.append(packId)  # updates the delivered packages list
-                        allPackageIds.remove(packId)  # remove package from package ids
-                stops.append(
-                    currentCity)  # after done with all package delivery operations in current city, we mark that
-                # we have visited the city
-
-            print("Current packages: ", truck.packages)
-
-        # GO BACK TO POST OFFICE TO GET MORE PACKAGES
-        routeOffice = dijkstra(map, truck.location, startLocation)
-        # DROP OFF PACKAGES THAT HAVE NOT BEEN DELIVERED
-        for packId in allPackageIds:
-            truck.removePackage(packId)  # must clean up how to offload packages to office
-    """
     stops = []
     deliveredTo = {}
     #AdjMap = ComputeAdj(map)
-
+    packIds = []
     sortedPkgs = sortpackagesbyoffice(packages)
     stops = [[truck.location]]
 
@@ -472,8 +395,11 @@ def deliveryService(map, truck, packages):
 
         while packagesNeeded and truck.getNumPackages() < truck.size:
             package = packagesNeeded.pop()
-            
             truck.collectPackage(package)
+
+        packagesInTruck = truck.getPackages()
+
+        #print(packagesInTruck)
 
         while truck.getNumPackages() > 0:
 
@@ -481,13 +407,18 @@ def deliveryService(map, truck, packages):
             # for i in truck.packages:
             #     if i is not None:
             #         pkg = truck.packages.pop(i)
+            pkg = packagesInTruck[0]
 
-            print("PACKAGE ID", pkg.id)
+            # if pkg is None:
+            #     #print("PACKAGE: ", pkg.address)
+            #     print("suck my dick!")
+            #print("PACKAGE ID", pkg.id)
 
             if pkg is not None:
                 addressToVisit = pkg.address
                 completeDriveThrough(truck, map, addressToVisit, stops)
 
+                
                 #print("PACKAGE IS TYPE: ", type(pkg))
 
                 for pkg in truck.packages:
