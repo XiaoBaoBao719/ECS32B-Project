@@ -472,13 +472,23 @@ def deliveryService(map, truck, packages):
 
         while packagesNeeded and truck.getNumPackages() < truck.size:
             package = packagesNeeded.pop()
+            
             truck.collectPackage(package)
 
-        while truck.packages:
-            pkg = truck.packages.pop(0)
+        while truck.getNumPackages() > 0:
+
+            # pkg = Package('pktemp')
+            # for i in truck.packages:
+            #     if i is not None:
+            #         pkg = truck.packages.pop(i)
+
+            print("PACKAGE ID", pkg.id)
+
             if pkg is not None:
-                addressToVisit = pkg[0].address
+                addressToVisit = pkg.address
                 completeDriveThrough(truck, map, addressToVisit, stops)
+
+                #print("PACKAGE IS TYPE: ", type(pkg))
 
                 for pkg in truck.packages:
                     if pkg.address == addressToVisit:
@@ -493,24 +503,24 @@ def deliveryService(map, truck, packages):
     return (deliveredTo, stops)
 
 
-# m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
-# o = 'UPS'
-#
-# pk1 = Package('pk1')
-# pk1.address = 'Brecon'
-# pk2 = Package('pk2')
-# pk2.address = 'Jacob City'
-# pk3 = Package('pk3')
-# pk3.address = 'Owl Ranch'
-# pk4 = Package('pk4')
-# pk4.address = 'Sunfield'
-#
-# packages = [pk1, pk2, pk3, pk4]
-#
-# for i in packages:
-#     i.office = 'UPS'
-#
-# print(packages)
+m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
+o = 'UPS'
 
-# truck = Truck(69, 20, o)
-# deliveryService(m, truck, packages)
+pk1 = Package('pk1')
+pk1.address = 'Brecon'
+pk2 = Package('pk2')
+pk2.address = 'Jacob City'
+pk3 = Package('pk3')
+pk3.address = 'Owl Ranch'
+pk4 = Package('pk4')
+pk4.address = 'Sunfield'
+
+packages = [pk1, pk2, pk3, pk4]
+
+for i in packages:
+    i.office = 'UPS'
+
+print(packages)
+
+truck = Truck(69, 20, o)
+deliveryService(m, truck, packages)
