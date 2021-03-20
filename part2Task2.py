@@ -476,13 +476,14 @@ def deliveryService(map, truck, packages):
 
         while truck.packages:
             pkg = truck.packages.pop(0)
-            addressToVisit = pkg[0].address
-            completeDriveThrough(truck, map, addressToVisit, stops)
+            if pkg is not None:
+                addressToVisit = pkg[0].address
+                completeDriveThrough(truck, map, addressToVisit, stops)
 
-            for pkg in truck.packages:
-                if pkg.address == addressToVisit:
-                    truck.deliveredPackages(pkg)
-                    deliveredTo.add(pkg.id, pkg.address)
+                for pkg in truck.packages:
+                    if pkg.address == addressToVisit:
+                        truck.deliveredPackages(pkg)
+                        deliveredTo.add(pkg.id, pkg.address)
 
 
         completeDriveThrough(truck, map, office, stops)
@@ -492,3 +493,24 @@ def deliveryService(map, truck, packages):
     return (deliveredTo, stops)
 
 
+# m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
+# o = 'UPS'
+#
+# pk1 = Package('pk1')
+# pk1.address = 'Brecon'
+# pk2 = Package('pk2')
+# pk2.address = 'Jacob City'
+# pk3 = Package('pk3')
+# pk3.address = 'Owl Ranch'
+# pk4 = Package('pk4')
+# pk4.address = 'Sunfield'
+#
+# packages = [pk1, pk2, pk3, pk4]
+#
+# for i in packages:
+#     i.office = 'UPS'
+#
+# print(packages)
+
+# truck = Truck(69, 20, o)
+# deliveryService(m, truck, packages)
