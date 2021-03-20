@@ -341,7 +341,7 @@ def findPath(map, start, destination):  # using BFS
         adjIndices = [index for index, element in enumerate(getAdjacencyMap(map)[curIndex]) if element >= 0]
 
         if (lastItem == destination):
-            validPath = currentPath
+            return currentPath
 
         adjVertices = []
         for i in adjIndices:
@@ -352,9 +352,9 @@ def findPath(map, start, destination):  # using BFS
                 newPath = list(currentPath)
                 newPath.append(adjacent)
                 myqueue.append(newPath)
-        mypaths.update({destination: validPath})
+        #mypaths.update({destination: validPath})
 
-    return mypaths
+    #return mypaths
 
 def followpath(path, stop, truck):
     if path == [] or truck.location != path[0]:
