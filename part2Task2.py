@@ -147,66 +147,6 @@ class Package:
         self.delivered = False
 
 
-"""
-@parameter id - integer value number that represents the package tracking number
-           tableSize - the size of the hash table 
-@precondition: both id and tableSize must be integer values
-@return: method returns an integer value i such that 0 <= i <= tableSize
-"""
-
-"""
-def hashMe(id, tableSize):
-    nums2 = 0
-
-    # checks if a string, uses ord() to convert string into int
-    if isinstance(id, str):
-        for i in id:
-            nums2 += ord(i)
-    else:
-        nums2 = id
-
-    square = pow(nums2, 2)
-    counter = 0
-    middle = ''
-    # converts id into a string
-    squared = str(square)
-    squared.strip()
-
-    # calculates the number of place digits to pick relative to the middle digit
-    distFromMiddle = int(math.log(tableSize, 10))
-
-    # gets the middle digit index
-    middleIndex = int((len(squared) / 2))
-
-    # gets the beginning the middle digits
-    fwd = middleIndex - distFromMiddle
-    # gets the end of the middle digits
-    bwd = middleIndex + distFromMiddle - 1
-    if fwd >= bwd:
-        middleNums = squared[bwd:fwd]
-    else:
-        middleNums = squared[fwd:bwd]
-    # gets the middle digits
-
-    # middleNums = squared[fwd:bwd]
-    # middleNums = squared[bwd:fwd]
-    # Returns index (key)
-    middleNums.strip()
-
-    return int(middleNums) % tableSize
-"""
-#Resolve Hash Collisions through linear probing
-def rehash(index, table):
-    collision = True
-    while collision:
-        if table[index] is not None:
-            index += 1
-        else:
-            return index
-
-tableDim = 20
-
-
 class Truck:
 
     def __init__(self, id, n, loc):
@@ -358,13 +298,78 @@ class Truck:
                 counter += 1
         return counter
 
-
 """
 deliveryService
 """
+def ComputeAdj(map):
+    adj = defaultdict(list)
+
+    counter = 0
+    for item in map:
+        adj[counter] = [item]
+        counter += 1
+
+    for key in adj.getKeys():
+        sort(adj[key])
+
+    return adj
+
+def sortpackagesbyoffice(packages):
+    pkgsByOffice = defaultdict(list)
+
+    for pkg in packages:
+        pkgsByOffice[pk.office].append(pkg)
+
+    return pkgsByOffice
+
+def findPath(map, start, destination):  # using BFS
+    mypaths = {}
+    # for i in getLocations(map):
+
+    myqueue = []
+    myqueue.append([start])
+    visited = []
+
+    while myqueue:
+        currentPath = myqueue.pop(0)
+        visited.append(currentPath[-1])
+        # print(myqueue)
+        lastItem = currentPath[-1]
+        curIndex = getLocations(map).index(lastItem)
+        adjIndices = [index for index, element in enumerate(getAdjacencyMap(map)[curIndex]) if element >= 0]
+
+        if (lastItem == destination):
+            validPath = currentPath
+
+        adjVertices = []
+        for i in adjIndices:
+            adjVertices.append(getLocations(map)[i])
+
+        for adjacent in adjVertices:
+            if (adjacent not in visited):
+                newPath = list(currentPath)
+                newPath.append(adjacent)
+                myqueue.append(newPath)
+        mypaths.update({destination: validPath})
+
+    return mypaths
+
+def followpath(path, stop, truck):
+    if path == [] or truck.location != path[0]:
+        return
+    for place in path:
+        truck.driveTo(place)
+        stop.append(place)
+
+
+def comepleteDriveThrough(truck, adj, destination, stop):
+    path = findPath(adj, truck.location, destination)
+    followpath(path, stop, truck)
+
 
 
 def deliveryService(map, truck, packages):
+    """
     deliveredTo = {}
     stops = []
 
@@ -450,13 +455,43 @@ def deliveryService(map, truck, packages):
         # DROP OFF PACKAGES THAT HAVE NOT BEEN DELIVERED
         for packId in allPackageIds:
             truck.removePackage(packId)  # must clean up how to offload packages to office
+    """
+    stops = []
+    deliverTo = {}
+    AdjMap = ComputeAdj(map)
 
+    sortedPkgs = sortpackages(packages)
+    stops = [[truck.location]]
+
+    for office in sortedByOffice:
+
+        packagesNeeded = sortedPkgs[office]
+        completeDriveThrough(truck, map, office, stops)
+
+        while packagesNeeded and truck.getNumPackages() < truck.size:
+            package = packagesNeeded.pop()
+            truck.collectPackage(package)
+
+        while truck.packages:
+            pkg = truck.packages.pop(0)
+            addressToVisit = pkg[0].address
+            completeDriveThrough(truck, map, routeToVisit, stops)
+
+            for pkg in truck.packages:
+                if pkg.address == addressToVisit:
+                    truck.deliveredPackages(pkg)
+                    deliveredTo.append{[pkg.id : pkg.address]}
+
+
+        completeDriveThrough(truck, map, office, stops)
+
+    
     print("FINAL OUTPUT", deliveredTo, stops)
     return (deliveredTo, stops)
 
 
 #DRIVER CODE
-
+"""
 m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
 o = 'UPS'
 
@@ -478,6 +513,6 @@ for i in packages:
 
 truck = Truck(69, 5, o)
 deliveryService(m, truck, packages)
-
+"""
 #test
 
