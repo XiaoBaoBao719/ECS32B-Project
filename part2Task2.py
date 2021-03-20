@@ -80,7 +80,7 @@ def dijkstra(map, office, destination):  # now taking a destination path
     col = len(matrix[0])
 
     # distances = [math.inf] * row
-    distances = [math.inf] * row
+    distances = [float('inf')] * row
     parent = [-1] * row
 
     officeIndex = getLocations(map).index('UPS')  # Setting office distance from itself equal to zero
@@ -92,7 +92,7 @@ def dijkstra(map, office, destination):  # now taking a destination path
     route = []
     while myqueue:
         # shortDist = math.inf  # shortest distance
-        shortDist = math.inf
+        shortDist = float('inf')
         shortIndex = -1  # shortest index, will check if previous node has shorter distance than current node
 
         for k in range(len(matrix)):
@@ -154,7 +154,7 @@ class Package:
 @return: method returns an integer value i such that 0 <= i <= tableSize
 """
 
-
+"""
 def hashMe(id, tableSize):
     nums2 = 0
 
@@ -194,7 +194,15 @@ def hashMe(id, tableSize):
     middleNums.strip()
 
     return int(middleNums) % tableSize
-
+"""
+#Resolve Hash Collisions through linear probing
+def rehash(index, table):
+    collision = True
+    while collision:
+        if table[index] is not None:
+            index += 1
+        else:
+            return index
 
 tableDim = 20
 
@@ -207,6 +215,21 @@ class Truck:
         self.location = loc
         self.packages = [None] * self.size
         self.packagesDelivered = [False] * self.size
+
+    def hashMe(self, id):
+
+        index = 0
+
+        if isinstance(id, str):
+            for i in id:
+                index += ord(i)
+
+        print(type(index))
+        index = index % self.size
+
+        while self.packages[index] is not None and self.packages[index] != id:
+            index = (index + 1) % self.size
+        return index
 
     def collectPackage(self, pk):
         print("COLLECTING")
@@ -226,13 +249,17 @@ class Truck:
 
         curNumPkgs = 0
 
+        print("NOW INSERTING ", pk)
+
         for i in range(len(self.packages)):
+            print("CHECKING NUM PACKAGES", self.packages[i])
+
             if self.packages[i] is not None:
                 curNumPkgs += 1
 
         print("Curent num pkgs", curNumPkgs)
 
-        index = hashMe(pk.id, len(self.packages))
+        index = self.hashMe(pk.id)
 
         if self.location == pk.office:
             if (curNumPkgs < self.size):
@@ -249,7 +276,7 @@ class Truck:
     def deliverOnePackage(self, pk):
         # Remove a singular package out of truck into delivery address
         print('DELIVERING ONE PACKAGES')
-        index = hashMe(pk.id, tableDim)
+        index = self.hashMe(pk.id)
         if self.location == pk.address and self.packages[index] is not None:
             self.packagesDelivered[index] = True
             # self.packagesDelivered.append(pk.id)
@@ -284,7 +311,7 @@ class Truck:
     def removePackage(self, pk):
         print("REMOVING A PACKAGE")
         print(pk.office)
-        index = hashMe(pk.id, tableDim)
+        index = self.hashMe(pk.id)
         if self.packages[index] is not None:
             self.packages.office[index] = self.location  # updating self.packages[index].office = self.location -Gianni
             pk.delivered = False
@@ -320,7 +347,7 @@ class Truck:
 
 
     def isDelivered(self, packId):
-        index = hashMe(packId, tableDim)
+        index = self.hashMe(packId)
         return self.packagesDelivered[index]
 
 
@@ -429,31 +456,7 @@ def deliveryService(map, truck, packages):
 
 
 #DRIVER CODE
-<<<<<<< HEAD
 
-# m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
-# o = 'UPS'
-#
-# pk1 = Package('pk1')
-# pk1.address = 'Brecon'
-# pk2 = Package('pk2')
-# pk2.address = 'Jacob City'
-# pk3 = Package('pk3')
-# pk3.address = 'Owl Ranch'
-# pk4 = Package('pk4')
-# pk4.address = 'Sunfield'
-#
-# packages = [pk1, pk2, pk3, pk4]
-#
-# for i in packages:
-#     i.office = 'UPS'
-#
-# # print(packages)
-#
-# truck = Truck(69, 20, o)
-# deliveryService(m, truck, packages)
-=======
-"""
 m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
 o = 'UPS'
 
@@ -473,8 +476,8 @@ for i in packages:
 
 # print(packages)
 
-truck = Truck(69, 20, o)
+truck = Truck(69, 5, o)
 deliveryService(m, truck, packages)
-"""
+
 #test
 
