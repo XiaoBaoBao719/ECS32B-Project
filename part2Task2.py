@@ -463,7 +463,7 @@ def deliveryService(map, truck, packages):
     sortedPkgs = sortpackagesbyoffice(packages)
     stops = [[truck.location]]
 
-    for office in sortedByOffice:
+    for office in sortedPkgs:
 
         packagesNeeded = sortedPkgs[office]
         completeDriveThrough(truck, map, office, stops)
@@ -475,7 +475,7 @@ def deliveryService(map, truck, packages):
         while truck.packages:
             pkg = truck.packages.pop(0)
             addressToVisit = pkg[0].address
-            completeDriveThrough(truck, map, routeToVisit, stops)
+            completeDriveThrough(truck, map, addressToVisit, stops)
 
             for pkg in truck.packages:
                 if pkg.address == addressToVisit:
