@@ -397,17 +397,17 @@ def deliveryService(map, truck, packages):
             package = packagesNeeded.pop()
             truck.collectPackage(package)
 
-        packagesInTruck = truck.getPackages()
+        # packagesInTruck = truck.getPackages()
 
         #print(packagesInTruck)
 
-        while truck.getNumPackages() > 0:
+        for pkg in truck.getPackages():
 
             # pkg = Package('pktemp')
             # for i in truck.packages:
             #     if i is not None:
             #         pkg = truck.packages.pop(i)
-            pkg = packagesInTruck[0]
+            # pkg = packagesInTruck[0]
 
             # if pkg is None:
             #     #print("PACKAGE: ", pkg.address)
@@ -424,6 +424,7 @@ def deliveryService(map, truck, packages):
                 for pkg in truck.packages:
                     if pkg is not None and pkg.address == addressToVisit:
                         truck.deliverOnePackage(pkg)
+                        
                         deliveredTo[pkg.id] = pkg.address
 
 
