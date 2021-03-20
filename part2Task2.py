@@ -2,7 +2,7 @@
 Copy your Package and Truck classes here
 """
 import math
-
+from collections import defaultdict
 
 class Queue:
     def __init__(self):
@@ -310,7 +310,7 @@ def ComputeAdj(map):
         counter += 1
 
     for key in adj.getKeys():
-        sort(adj[key])
+        sorted(adj[key])
 
     return adj
 
@@ -318,7 +318,7 @@ def sortpackagesbyoffice(packages):
     pkgsByOffice = defaultdict(list)
 
     for pkg in packages:
-        pkgsByOffice[pk.office].append(pkg)
+        pkgsByOffice[pkg.office].append(pkg)
 
     return pkgsByOffice
 
@@ -362,7 +362,7 @@ def followpath(path, stop, truck):
         stop.append(place)
 
 
-def comepleteDriveThrough(truck, adj, destination, stop):
+def completeDriveThrough(truck, adj, destination, stop):
     path = findPath(adj, truck.location, destination)
     followpath(path, stop, truck)
 
@@ -489,30 +489,4 @@ def deliveryService(map, truck, packages):
     print("FINAL OUTPUT", deliveredTo, stops)
     return (deliveredTo, stops)
 
-
-#DRIVER CODE
-"""
-m = [('UPS', 'Brecon', 3), ('Jacob City', 'Owl Ranch', 3), ('Jacob City', 'Sunfield', 15), ('Sunfield', 'Brecon', 25)]
-o = 'UPS'
-
-pk1 = Package('pk1')
-pk1.address = 'Brecon'
-pk2 = Package('pk2')
-pk2.address = 'Jacob City'
-pk3 = Package('pk3')
-pk3.address = 'Owl Ranch'
-pk4 = Package('pk4')
-pk4.address = 'Sunfield'
-
-packages = [pk1, pk2, pk3, pk4]
-
-for i in packages:
-    i.office = 'UPS'
-
-# print(packages)
-
-truck = Truck(69, 5, o)
-deliveryService(m, truck, packages)
-"""
-#test
 
