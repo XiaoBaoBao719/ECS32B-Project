@@ -480,7 +480,7 @@ def deliveryService(map, truck, packages):
             for pkg in truck.packages:
                 if pkg.address == addressToVisit:
                     truck.deliveredPackages(pkg)
-                    deliveredTo.append{[pkg.id : pkg.address]}
+                    deliveredTo.add(pkg.id, pkg.address)
 
 
         completeDriveThrough(truck, map, office, stops)
