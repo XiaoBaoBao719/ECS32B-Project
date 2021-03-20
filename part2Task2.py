@@ -301,6 +301,7 @@ class Truck:
 """
 deliveryService
 """
+"""
 def ComputeAdj(map):
     adj = defaultdict(list)
 
@@ -313,6 +314,7 @@ def ComputeAdj(map):
         sorted(adj[key])
 
     return adj
+"""
 
 def sortpackagesbyoffice(packages):
     pkgsByOffice = defaultdict(list)
@@ -458,7 +460,7 @@ def deliveryService(map, truck, packages):
     """
     stops = []
     deliveredTo = {}
-    AdjMap = ComputeAdj(map)
+    #AdjMap = ComputeAdj(map)
 
     sortedPkgs = sortpackagesbyoffice(packages)
     stops = [[truck.location]]
