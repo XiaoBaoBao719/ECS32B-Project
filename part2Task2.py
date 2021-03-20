@@ -457,10 +457,10 @@ def deliveryService(map, truck, packages):
             truck.removePackage(packId)  # must clean up how to offload packages to office
     """
     stops = []
-    deliverTo = {}
+    deliveredTo = {}
     AdjMap = ComputeAdj(map)
 
-    sortedPkgs = sortpackages(packages)
+    sortedPkgs = sortpackagesbyoffice(packages)
     stops = [[truck.location]]
 
     for office in sortedByOffice:
